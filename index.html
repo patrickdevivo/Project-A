@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Riemman Sums</title>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="flot/jquery.flot.js"></script>
+
+
+<script type="text/javascript">
+	//initialize stuff...
+	
+	a = 0;
+	b = 5;
+	limit = 1000;
+	
+	var sum_r = {label: "Right Sum", data: []};
+	var sum_l = {label: "Left Sum", data: []};
+	var sum_m = {label: "Midpoint Sum", data: []};
+	var sum_ran = {label: "Random Point Sum", data: []};
+	var graph_f = [];
+	
+	f = function f(input) {
+		return Math.exp(input);
+	}
+	//
+	
+	for (n=1; n<=limit; n++) {
+	d = 0;
+	s_r = 0;
+	s_l = 0;
+	s_m = 0;
+	s_ran = 0;
+	d = (b-a)/n;
+
+		//right hand sum
+		for (i=1;i<=n;i++) {
+			x = 0;
+			x = a+(i*d);
+			s_r = s_r + (f(x));
+		}
+
+		//left hand sum
+		for (i=0;i<=n-1;i++) {
+			x = 0;
+			x = a+(i*d);
+			s_l = s_l + (f(x));
+		}
+		
+		//midpoint sum
+		for (i=0;i<=n-1;i++) {
+			x = 0;
+			x = a+(i*d) + (d/2);
+			s_m = s_m + (f(x));
+		}
+		
+		//random sum
+		for (i=0;i<=n-1;i++) {
+			x = 0;
+			x = a+(i*d) + Math.random()*d;
+			s_ran = s_ran + (f(x));
+		}
+		
+
+	sum_r.data.push([n, s_r*d]);
+	sum_l.data.push([n, s_l*d]);
+	sum_m.data.push([n, s_m*d]);
+	sum_ran.data.push([n, s_ran*d]);
+	graph_f.push([n, f(n)]);
+	}
+	
+</script>
+</head>
+
+<body>
+
+<div id="graph" style="width:100%;height:800px;"></div>
+
+
+</body>
+
+<script type="text/javascript">
+$(function () {
+	var options = {
+		yaxis: {
+			max: 300,	
+		},
+		xaxis: {
+			
+		},
+		series: {
+            lines: { show: true, lineWidth: 2 },
+			points: { show: true, radius: 0 },
+			shadowSize: 1,
+        },
+	}
+	$.plot($("#graph"), [ sum_r, sum_l, sum_m, sum_ran ], options);
+});
+</script>
+</html> 
